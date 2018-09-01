@@ -27,14 +27,14 @@ def get_client(celery_app):
     try:
         client = _state.clients[celery_app]
     except AttributeError:
-        client = statsd.StatsClient(
+        client = statsd.ConsistentHashingStatsClient(
             celery_app.conf.STATSD_HOST,
             celery_app.conf.STATSD_PORT
         )
 
         _state.clients = {celery_app: client}
     except KeyError:
-        client = statsd.StatsClient(
+        client = statsd.ConsistentHashingStatsClient(
             celery_app.conf.STATSD_HOST,
             celery_app.conf.STATSD_PORT
         )
